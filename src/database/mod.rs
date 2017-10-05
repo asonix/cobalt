@@ -3,6 +3,8 @@ extern crate r2d2;
 extern crate r2d2_diesel;
 extern crate std;
 
+mod schema;
+
 use self::r2d2_diesel::ConnectionManager;
 
 pub const DATABASE_FILE: &'static str = env!("DATABASE_URL");
