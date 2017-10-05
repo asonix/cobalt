@@ -5,7 +5,7 @@ pub mod users {
         pub summary: String,
     }
 
-    pub fn fetch() -> User {
+    pub fn fetch(_username: String) -> User {
         User {
             username: "sorin".to_string(),
             name: "Sorin Davidoi".to_string(),
