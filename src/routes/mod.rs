@@ -7,12 +7,17 @@ use activity_pub::ActivityPub;
 use database;
 
 pub fn create() -> Vec<rocket::Route> {
-    routes!(user, user_followers)
+    routes!(user, user_following, user_followers)
 }
 
 #[get("/users/<username>", format = "application/activity+json")]
 fn user(username: String) -> rocket_contrib::Json<serde_json::Value> {
     rocket_contrib::Json(database::users::fetch(username).as_activity_pub())
+}
+
+#[get("/users/<username>/following", format = "application/activity+json")]
+fn user_following(username: String) -> rocket_contrib::Json<serde_json::Value> {
+    rocket_contrib::Json(database::users::fetch_following(username).as_activity_pub())
 }
 
 #[get("/users/<username>/followers", format = "application/activity+json")]
