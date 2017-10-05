@@ -12,5 +12,8 @@ mod activity_pub;
 mod routes;
 
 fn main() {
-    rocket::ignite().mount("/", routes::create()).launch();
+    rocket::ignite()
+        .manage(database::create_connection_pool())
+        .mount("/", routes::create())
+        .launch();
 }
