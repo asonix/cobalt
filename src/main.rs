@@ -18,6 +18,6 @@ mod routes;
 fn main() {
     rocket::ignite()
         .manage(database::create_connection_pool())
-        .mount("/", routes::create())
+        .mount("/api", routes::create())
         .launch();
 }

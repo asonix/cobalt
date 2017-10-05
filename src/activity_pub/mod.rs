@@ -14,12 +14,12 @@ impl ActivityPub for database::users::User {
             "@context": [
                 "https://www.w3.org/ns/activitystreams",
             ],
-            "id": format!("http://localhost:8000/users/{}", self.username),
+            "id": format!("http://localhost:8000/api/users/{}", self.username),
             "type": "Person",
-            "following": format!("http://localhost:8000/users/{}/following", self.username),
-            "followers": format!("http://localhost:8000/users/{}/followers", self.username),
-            "inbox": format!("http://localhost:8000/users/{}/inbox", self.username),
-            "outbox": format!("http://localhost:8000/users/{}/outbox", self.username),
+            "following": format!("http://localhost:8000/api/users/{}/following", self.username),
+            "followers": format!("http://localhost:8000/api/users/{}/followers", self.username),
+            "inbox": format!("http://localhost:8000/api/users/{}/inbox", self.username),
+            "outbox": format!("http://localhost:8000/api/users/{}/outbox", self.username),
             "preferredUsername": self.username,
             "name": self.name,
             "summary": self.summary,
@@ -34,12 +34,12 @@ impl ActivityPub for database::users::Following {
             "@context": [
                 "https://www.w3.org/ns/activitystreams",
             ],
-            "id": format!("http://localhost:8000/users/{}/following", self.username),
+            "id": format!("http://localhost:8000/api/users/{}/following", self.username),
             "type": "OrderedCollection",
             "totalItems": self.following.len(),
             "orderedItems": self.following
                 .iter()
-                .map(|follower| format!("http://localhost:8000/users/{}", follower.username))
+                .map(|follower| format!("http://localhost:8000/api/users/{}", follower.username))
                 .collect::<Vec<String>>(),
         })
     }
@@ -51,12 +51,12 @@ impl ActivityPub for database::users::Followers {
             "@context": [
                 "https://www.w3.org/ns/activitystreams",
             ],
-            "id": format!("http://localhost:8000/users/{}/followers", self.username),
+            "id": format!("http://localhost:8000/api/users/{}/followers", self.username),
             "type": "OrderedCollection",
             "totalItems": self.followers.len(),
             "orderedItems": self.followers
                 .iter()
-                .map(|follower| format!("http://localhost:8000/users/{}", follower.username))
+                .map(|follower| format!("http://localhost:8000/api/users/{}", follower.username))
                 .collect::<Vec<String>>(),
         })
     }
@@ -68,7 +68,7 @@ impl ActivityPub for database::users::Outbox {
             "@context": [
                 "https://www.w3.org/ns/activitystreams",
             ],
-            "id": format!("http://localhost:8000/users/{}/outbox", self.username),
+            "id": format!("http://localhost:8000/api/users/{}/outbox", self.username),
             "type": "OrderedCollection",
             "totalItems": 0,
             "orderedItems": [],
