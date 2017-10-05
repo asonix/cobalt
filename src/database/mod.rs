@@ -5,6 +5,11 @@ pub mod users {
         pub summary: String,
     }
 
+    pub struct Following {
+        pub username: String,
+        pub following: Vec<User>,
+    }
+
     pub struct Followers {
         pub username: String,
         pub followers: Vec<User>,
@@ -15,6 +20,19 @@ pub mod users {
             username: "sorin".to_string(),
             name: "Sorin Davidoi".to_string(),
             summary: "Cobalt user".to_string(),
+        }
+    }
+
+    pub fn fetch_following(username: String) -> Following {
+        Following {
+            username,
+            following: vec![
+                User {
+                    username: "ghost".to_string(),
+                    name: "Ghost".to_string(),
+                    summary: "Cobalt ghost user.".to_string(),
+                },
+            ],
         }
     }
 
