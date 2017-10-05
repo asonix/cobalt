@@ -28,6 +28,23 @@ impl ActivityPub for database::users::User {
     }
 }
 
+impl ActivityPub for database::users::Following {
+    fn as_activity_pub(&self) -> serde_json::Value {
+        json!({
+            "@context": [
+                "https://www.w3.org/ns/activitystreams",
+            ],
+            "id": format!("http://localhost:8000/users/{}/following", self.username),
+            "type": "OrderedCollection",
+            "totalItems": self.following.len(),
+            "orderedItems": self.following
+                .iter()
+                .map(|follower| format!("http://localhost:8000/users/{}", follower.username))
+                .collect::<Vec<String>>(),
+        })
+    }
+}
+
 impl ActivityPub for database::users::Followers {
     fn as_activity_pub(&self) -> serde_json::Value {
         json!({
