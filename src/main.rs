@@ -9,13 +9,8 @@ extern crate serde_json;
 
 mod database;
 mod activity_pub;
-
-#[get("/users/sorin", format = "application/activity+json")]
-fn user() -> rocket_contrib::Json<serde_json::Value> {
-    use activity_pub::ActivityPub;
-    rocket_contrib::Json(database::users::fetch().as_activity_pub())
-}
+mod routes;
 
 fn main() {
-    rocket::ignite().mount("/", routes![user]).launch();
+    rocket::ignite().mount("/", routes::create()).launch();
 }
