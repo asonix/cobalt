@@ -61,3 +61,17 @@ impl ActivityPub for database::users::Followers {
         })
     }
 }
+
+impl ActivityPub for database::users::Outbox {
+    fn as_activity_pub(&self) -> serde_json::Value {
+        json!({
+            "@context": [
+                "https://www.w3.org/ns/activitystreams",
+            ],
+            "id": format!("http://localhost:8000/users/{}/outbox", self.username),
+            "type": "OrderedCollection",
+            "totalItems": 0,
+            "orderedItems": [],
+        })
+    }
+}
