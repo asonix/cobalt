@@ -11,23 +11,35 @@ pub fn create() -> Vec<rocket::Route> {
 }
 
 #[get("/users/<username>", format = "application/activity+json")]
-fn user(username: String) -> rocket_contrib::Json<serde_json::Value> {
-    rocket_contrib::Json(database::users::fetch(username).as_activity_pub())
+fn user(username: String) -> Option<rocket_contrib::Json<serde_json::Value>> {
+    match database::users::fetch(username) {
+        Some(user) => Some(rocket_contrib::Json(user.as_activity_pub())),
+        None => None,
+    }
 }
 
 #[get("/users/<username>/following", format = "application/activity+json")]
-fn user_following(username: String) -> rocket_contrib::Json<serde_json::Value> {
-    rocket_contrib::Json(database::users::fetch_following(username).as_activity_pub())
+fn user_following(username: String) -> Option<rocket_contrib::Json<serde_json::Value>> {
+    match database::users::fetch_following(username) {
+        Some(following) => Some(rocket_contrib::Json(following.as_activity_pub())),
+        None => None,
+    }
 }
 
 #[get("/users/<username>/followers", format = "application/activity+json")]
-fn user_followers(username: String) -> rocket_contrib::Json<serde_json::Value> {
-    rocket_contrib::Json(database::users::fetch_followers(username).as_activity_pub())
+fn user_followers(username: String) -> Option<rocket_contrib::Json<serde_json::Value>> {
+    match database::users::fetch_followers(username) {
+        Some(followers) => Some(rocket_contrib::Json(followers.as_activity_pub())),
+        None => None,
+    }
 }
 
 #[get("/users/<username>/outbox", format = "application/activity+json")]
-fn user_outbox(username: String) -> rocket_contrib::Json<serde_json::Value> {
-    rocket_contrib::Json(database::users::fetch_outbox(username).as_activity_pub())
+fn user_outbox(username: String) -> Option<rocket_contrib::Json<serde_json::Value>> {
+    match database::users::fetch_outbox(username) {
+        Some(outbox) => Some(rocket_contrib::Json(outbox.as_activity_pub())),
+        None => None,
+    }
 }
 
 impl<'a, 'r> rocket::request::FromRequest<'a, 'r> for database::Connection {

@@ -53,16 +53,16 @@ pub mod users {
         pub outbox: Vec<Post>,
     }
 
-    pub fn fetch(_username: String) -> User {
-        User {
+    pub fn fetch(_username: String) -> Option<User> {
+        Some(User {
             username: "sorin".to_string(),
             name: "Sorin Davidoi".to_string(),
             summary: "Cobalt user".to_string(),
-        }
+        })
     }
 
-    pub fn fetch_following(username: String) -> Following {
-        Following {
+    pub fn fetch_following(username: String) -> Option<Following> {
+        Some(Following {
             username,
             following: vec![
                 User {
@@ -71,11 +71,11 @@ pub mod users {
                     summary: "Cobalt ghost user.".to_string(),
                 },
             ],
-        }
+        })
     }
 
-    pub fn fetch_followers(username: String) -> Followers {
-        Followers {
+    pub fn fetch_followers(username: String) -> Option<Followers> {
+        Some(Followers {
             username,
             followers: vec![
                 User {
@@ -84,13 +84,13 @@ pub mod users {
                     summary: "Cobalt ghost user.".to_string(),
                 },
             ],
-        }
+        })
     }
 
-    pub fn fetch_outbox(username: String) -> Outbox {
-        Outbox {
+    pub fn fetch_outbox(username: String) -> Option<Outbox> {
+        Some(Outbox {
             username,
             outbox: vec![Post {}],
-        }
+        })
     }
 }
