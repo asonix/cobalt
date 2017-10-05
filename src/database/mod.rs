@@ -15,6 +15,13 @@ pub mod users {
         pub followers: Vec<User>,
     }
 
+    pub struct Post {}
+
+    pub struct Outbox {
+        pub username: String,
+        pub outbox: Vec<Post>,
+    }
+
     pub fn fetch(_username: String) -> User {
         User {
             username: "sorin".to_string(),
@@ -46,6 +53,13 @@ pub mod users {
                     summary: "Cobalt ghost user.".to_string(),
                 },
             ],
+        }
+    }
+
+    pub fn fetch_outbox(username: String) -> Outbox {
+        Outbox {
+            username,
+            outbox: vec![Post {}],
         }
     }
 }
