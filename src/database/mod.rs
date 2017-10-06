@@ -30,13 +30,19 @@ pub fn create_connection_pool() -> Pool {
 }
 
 pub mod users {
+    use diesel;
+    use diesel::ExecuteDsl;
+    use database::Connection;
+    use database::schema::users;
+
     pub struct User {
         pub username: String,
         pub name: String,
         pub summary: String,
     }
 
-    #[derive(Deserialize)]
+    #[derive(Insertable, Serialize, Deserialize)]
+    #[table_name = "users"]
     pub struct RegisterUser {
         pub username: String,
         pub password: String,
@@ -59,6 +65,13 @@ pub mod users {
     pub struct Outbox {
         pub username: String,
         pub outbox: Vec<Post>,
+    }
+
+    pub fn register(user: RegisterUser, conn: Connection) {
+        diesel::insert(&user)
+            .into(users::table)
+            .execute(&*conn)
+            .unwrap();
     }
 
     pub fn fetch(_username: String) -> Option<User> {
