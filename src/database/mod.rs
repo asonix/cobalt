@@ -31,12 +31,15 @@ pub fn create_connection_pool() -> Pool {
 
 pub mod users {
     use diesel;
-    use diesel::ExecuteDsl;
+    use diesel::{ExecuteDsl, ExpressionMethods, FilterDsl, FirstDsl};
     use database::Connection;
     use database::schema::users;
 
+    #[derive(Queryable)]
     pub struct User {
+        pub id: i32,
         pub username: String,
+        pub password: String,
         pub name: String,
         pub summary: String,
     }
@@ -74,12 +77,16 @@ pub mod users {
             .unwrap();
     }
 
-    pub fn fetch(_username: String) -> Option<User> {
-        Some(User {
-            username: "sorin".to_string(),
-            name: "Sorin Davidoi".to_string(),
-            summary: "Cobalt user".to_string(),
-        })
+    pub fn fetch(username: String, conn: Connection) -> Option<User> {
+        let query = users::table
+            .filter(users::columns::username.eq(username))
+            .first::<User>(&*conn);
+
+        match query {
+            Ok(user) => Some(user),
+            Err(diesel::result::Error::NotFound) => None,
+            Err(_) => None,
+        }
     }
 
     pub fn fetch_following(username: String) -> Option<Following> {
@@ -87,7 +94,9 @@ pub mod users {
             username,
             following: vec![
                 User {
+                    id: 1,
                     username: "ghost".to_string(),
+                    password: "password".to_string(),
                     name: "Ghost".to_string(),
                     summary: "Cobalt ghost user.".to_string(),
                 },
@@ -100,7 +109,9 @@ pub mod users {
             username,
             followers: vec![
                 User {
+                    id: 1,
                     username: "ghost".to_string(),
+                    password: "password".to_string(),
                     name: "Ghost".to_string(),
                     summary: "Cobalt ghost user.".to_string(),
                 },

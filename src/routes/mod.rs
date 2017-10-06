@@ -16,8 +16,11 @@ fn register(user: rocket_contrib::Json<database::users::RegisterUser>, conn: dat
 }
 
 #[get("/users/<username>", format = "application/activity+json")]
-fn user(username: String) -> Option<rocket_contrib::Json<serde_json::Value>> {
-    match database::users::fetch(username) {
+fn user(
+    username: String,
+    conn: database::Connection,
+) -> Option<rocket_contrib::Json<serde_json::Value>> {
+    match database::users::fetch(username, conn) {
         Some(user) => Some(rocket_contrib::Json(user.as_activity_pub())),
         None => None,
     }
