@@ -35,10 +35,12 @@ pub mod users {
     use database::Connection;
     use database::schema::users;
 
-    #[derive(Queryable)]
+    #[derive(Queryable, Serialize)]
     pub struct User {
+        #[serde(skip_serializing)]
         pub id: i32,
         pub username: String,
+        #[serde(skip_serializing)]
         pub password: String,
         pub name: String,
         pub summary: String,
@@ -51,6 +53,12 @@ pub mod users {
         pub password: String,
         pub name: String,
         pub summary: String,
+    }
+
+    #[derive(Deserialize)]
+    pub struct LoginUser {
+        pub username: String,
+        pub password: String,
     }
 
     pub struct Following {
@@ -75,6 +83,19 @@ pub mod users {
             .into(users::table)
             .execute(&*conn)
             .unwrap();
+    }
+
+    pub fn login(user: LoginUser, conn: Connection) -> Option<User> {
+        match fetch(user.username, conn) {
+            Some(database_user) => {
+                if user.password.eq(&database_user.password) {
+                    Some(database_user)
+                } else {
+                    None
+                }
+            }
+            None => None,
+        }
     }
 
     pub fn fetch(username: String, conn: Connection) -> Option<User> {
