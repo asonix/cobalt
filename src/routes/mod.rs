@@ -7,8 +7,11 @@ use activity_pub::ActivityPub;
 use database;
 
 pub fn create() -> Vec<rocket::Route> {
-    routes!(user, user_following, user_followers, user_outbox)
+    routes!(register, user, user_following, user_followers, user_outbox)
 }
+
+#[post("/register", data = "<_user>", format = "application/json")]
+fn register(_user: rocket_contrib::Json<database::users::RegisterUser>) {}
 
 #[get("/users/<username>", format = "application/activity+json")]
 fn user(username: String) -> Option<rocket_contrib::Json<serde_json::Value>> {

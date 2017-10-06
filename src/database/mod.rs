@@ -36,6 +36,14 @@ pub mod users {
         pub summary: String,
     }
 
+    #[derive(Deserialize)]
+    pub struct RegisterUser {
+        pub username: String,
+        pub password: String,
+        pub name: String,
+        pub summary: String,
+    }
+
     pub struct Following {
         pub username: String,
         pub following: Vec<User>,
