@@ -27,9 +27,13 @@ fn register(user: rocket_contrib::Json<database::users::RegisterUser>, conn: dat
 fn login(
     user: rocket_contrib::Json<database::users::LoginUser>,
     conn: database::Connection,
+    mut cookies: rocket::http::Cookies,
 ) -> Option<rocket_contrib::Json<database::users::User>> {
     match database::users::login(user.0, conn) {
-        Some(user) => Some(rocket_contrib::Json(user)),
+        Some(user) => {
+            cookies.add_private(rocket::http::Cookie::new("user_id", user.id.to_string()));
+            Some(rocket_contrib::Json(user))
+        }
         None => None,
     }
 }
