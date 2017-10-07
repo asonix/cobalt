@@ -6,6 +6,7 @@ extern crate diesel;
 #[macro_use]
 extern crate diesel_codegen;
 extern crate rocket;
+extern crate rocket_cors;
 extern crate rocket_contrib;
 extern crate serde;
 #[macro_use]
@@ -20,6 +21,7 @@ mod routes;
 fn main() {
     rocket::ignite()
         .manage(database::create_connection_pool())
+        .attach(routes::create_cors_options())
         .mount("/api", routes::create())
         .launch();
 }

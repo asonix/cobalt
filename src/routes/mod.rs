@@ -1,5 +1,6 @@
 extern crate rocket;
 extern crate rocket_contrib;
+extern crate rocket_cors;
 extern crate serde;
 extern crate serde_json;
 
@@ -65,6 +66,13 @@ fn user_outbox(username: String) -> Option<rocket_contrib::Json<serde_json::Valu
     match database::users::fetch_outbox(username) {
         Some(outbox) => Some(rocket_contrib::Json(outbox.as_activity_pub())),
         None => None,
+    }
+}
+
+pub fn create_cors_options() -> rocket_cors::Cors {
+    rocket_cors::Cors {
+        allow_credentials: true,
+        ..Default::default()
     }
 }
 
