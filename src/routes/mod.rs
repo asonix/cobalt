@@ -12,6 +12,7 @@ pub fn create() -> Vec<rocket::Route> {
         register,
         login,
         me,
+        logout,
         user,
         user_following,
         user_followers,
@@ -42,6 +43,14 @@ fn login(
 #[get("/me", format = "application/json")]
 fn me(user: database::users::User) -> rocket_contrib::Json<database::users::User> {
     rocket_contrib::Json(user)
+}
+
+#[post("/logout")]
+fn logout(mut cookies: rocket::http::Cookies) {
+    match cookies.get_private("user_id") {
+        Some(cookie) => cookies.remove_private(cookie),
+        None => {}
+    }
 }
 
 #[get("/users/<username>", format = "application/activity+json")]
