@@ -31,7 +31,7 @@ pub fn create_connection_pool() -> Pool {
 
 pub mod users {
     use diesel;
-    use diesel::{ExecuteDsl, ExpressionMethods, FilterDsl, FirstDsl};
+    use diesel::{ExecuteDsl, ExpressionMethods, FindDsl, FilterDsl, FirstDsl};
     use database::Connection;
     use database::schema::users;
 
@@ -95,6 +95,16 @@ pub mod users {
                 }
             }
             None => None,
+        }
+    }
+
+    pub fn fetch_by_id(id: i32, conn: Connection) -> Option<User> {
+        let query = users::table.find(id).first::<User>(&*conn);
+
+        match query {
+            Ok(user) => Some(user),
+            Err(diesel::result::Error::NotFound) => None,
+            Err(_) => None,
         }
     }
 
