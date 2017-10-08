@@ -2,6 +2,20 @@ extern crate serde_json;
 
 use database;
 
+#[derive(Debug, Deserialize)]
+pub enum InboxTypes {
+    Follow,
+}
+
+#[derive(Deserialize)]
+pub struct Inbox {
+    pub id: String,
+    pub actor: String,
+    #[serde(rename = "type")]
+    pub _type: InboxTypes,
+    pub object: String,
+}
+
 pub trait ActivityPub {
     fn as_activity_pub(&self) -> serde_json::Value {
         panic!("Not implemented!");

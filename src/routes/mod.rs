@@ -4,7 +4,7 @@ extern crate rocket_cors;
 extern crate serde;
 extern crate serde_json;
 
-use activity_pub::ActivityPub;
+use activity_pub::{ActivityPub, Inbox, InboxTypes};
 use database;
 
 pub fn create() -> Vec<rocket::Route> {
@@ -16,6 +16,7 @@ pub fn create() -> Vec<rocket::Route> {
         user,
         user_following,
         user_followers,
+        user_inbox,
         user_outbox
     )
 }
@@ -80,6 +81,15 @@ fn user_followers(username: String) -> Option<rocket_contrib::Json<serde_json::V
     }
 }
 
+#[post("/users/<_username>/inbox", data = "<inbox>", format = "application/activity+json")]
+fn user_inbox(_username: String, inbox: Inbox) {
+    match inbox._type {
+        InboxTypes::Follow => {
+            panic!("Not implemented");
+        }
+    }
+}
+
 #[get("/users/<username>/outbox", format = "application/activity+json")]
 fn user_outbox(username: String) -> Option<rocket_contrib::Json<serde_json::Value>> {
     match database::users::fetch_outbox(username) {
@@ -106,6 +116,20 @@ impl<'a, 'r> rocket::request::FromRequest<'a, 'r> for database::Connection {
         match pool.get() {
             Ok(connection) => rocket::Outcome::Success(database::Connection(connection)),
             Err(_) => rocket::Outcome::Failure((rocket::http::Status::ServiceUnavailable, ())),
+        }
+    }
+}
+
+impl rocket::data::FromData for Inbox {
+    type Error = serde_json::Error;
+
+    fn from_data(
+        _request: &rocket::request::Request,
+        data: rocket::Data,
+    ) -> rocket::data::Outcome<Self, serde_json::Error> {
+        match serde_json::from_reader(data.open()) {
+            Ok(inbox) => rocket::Outcome::Success(inbox),
+            Err(e) => rocket::Outcome::Failure((rocket::http::Status::BadRequest, e)),
         }
     }
 }
