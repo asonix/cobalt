@@ -9,7 +9,7 @@ For a lightweight frontend see [Kobold](https://github.com/sorin-davidoi/kobold)
 ⚠️ **The passwords are currently stored in plain text** ⚠️
 
 ## Features
-- [x] Authentication - ⚠️ currently vulnerable to CSFR and possibly others ⚠️
+- [x] Authentication - ⚠️ currently vulnerable to CSRF and possibly others ⚠️
 - [x] User endpoint
 - [x] Following endpoint
 - [x] Followers endpoint
