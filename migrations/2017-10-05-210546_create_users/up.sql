@@ -5,3 +5,5 @@ CREATE TABLE users (
     name VARCHAR NOT NULL,
     summary TEXT NOT NULL
 );
+
+INSERT INTO users (id, password, username, name, summary) VALUES (0, 'admin', 'admin', 'Admin', 'The admin.');
