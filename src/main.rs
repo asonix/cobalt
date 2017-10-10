@@ -1,3 +1,4 @@
+#![recursion_limit="128"]
 #![feature(plugin)]
 #![plugin(rocket_codegen)]
 
@@ -5,6 +6,7 @@
 extern crate diesel;
 #[macro_use]
 extern crate diesel_codegen;
+extern crate hyper;
 extern crate rocket;
 extern crate rocket_cors;
 extern crate rocket_contrib;
