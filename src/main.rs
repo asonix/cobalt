@@ -16,6 +16,7 @@ extern crate serde;
 extern crate serde_derive;
 #[macro_use]
 extern crate serde_json;
+extern crate tokio_core;
 
 mod database;
 mod activity_pub;
