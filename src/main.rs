@@ -6,6 +6,7 @@
 extern crate diesel;
 #[macro_use]
 extern crate diesel_codegen;
+extern crate futures;
 extern crate hyper;
 extern crate rocket;
 extern crate rocket_cors;
